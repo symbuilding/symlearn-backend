@@ -1,6 +1,23 @@
 import * as zod from "zod";
 // import { time } from "console";
 
+export type Lecture = {
+    date: string;
+    room: string;
+    time: string;
+};
+
+export type Course = {
+    name: string;
+    instructor: string;
+    batch: string;
+    lectures: Lecture[];
+};
+
+export type TimeTable = {
+    courses: Course[];
+};
+
 export const timeTableSchema = zod.object({
     courses: zod.array(
         zod.object({

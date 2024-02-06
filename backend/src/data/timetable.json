@@ -1,0 +1,16 @@
+{
+    "courses": [
+        {
+            "name": "DSA",
+            "instructor": "Bitch",
+            "batch": "2023-26",
+            "lectures": [
+                {
+                    "date": "string",
+                    "room": "string",
+                    "time": "string"
+                }
+            ]
+        }
+    ]
+}

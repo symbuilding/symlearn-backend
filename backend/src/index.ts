@@ -1,6 +1,11 @@
 import express from "express";
 import bodyParser from "body-parser";
-import { timeTableSchema, classPatternSchema } from "./types";
+import { timeTableSchema, classPatternSchema, Lecture, Course } from "./types";
+import timetableData from "./data/timetable.json";
+
+const getTimetableData = async () => {
+    return timetableData;
+};
 
 let jsonParser = bodyParser.json();
 
@@ -13,23 +18,46 @@ app.get("/timetable", (_, res) => {
 app.get(
     "/timetable/course-wise/:coures_name/:date",
     jsonParser,
-    function (req, res) {
+    async function (req, res) {
         console.log(req.params.coures_name, req.params.date);
+
+        const data = await getTimetableData();
+
+        let desired_course: Course | undefined;
+
+        data.courses.forEach((course) => {
+            if (
+                course.name.toLowerCase() ===
+                req.params.coures_name.toLowerCase()
+            ) {
+                desired_course = course;
+            }
+        });
+
+        if (!desired_course) {
+            return res.json({
+                error: `Provided course, ${req.params.coures_name} does not exist`,
+            });
+        }
+
+        res.json(desired_course.lectures);
+
+        /*
+         *FIXME:  Do we need this :c
 
         const validatedData = timeTableSchema.safeParse(req.body);
 
         if (validatedData.success) {
             console.log(validatedData.data);
-            const resObj = {
-                res: "hi",
-            };
-            res.json(resObj);
+
+            res.json(getTimetableData());
         } else {
             const resObj = {
                 res: "nono. Bad request",
             };
             res.json(resObj);
         }
+        */
     }
 );
 
