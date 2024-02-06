@@ -1,4 +1,5 @@
 import * as zod from "zod";
+// import { time } from "console";
 
 export const timeTableSchema = zod.object({
     courses: zod.array(
@@ -15,4 +16,9 @@ export const timeTableSchema = zod.object({
             ),
         })
     ),
+});
+
+export const classPatternSchema = zod.object({
+    rows: zod.number().min(1).max(10),
+    columns: zod.number().min(1).max(10),
 });
