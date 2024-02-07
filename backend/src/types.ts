@@ -2,6 +2,7 @@ import * as zod from "zod";
 // import { time } from "console";
 
 export type Lecture = {
+    lid: number;
     date: string;
     room: string;
     time: string;
@@ -31,6 +32,16 @@ export const timeTableSchema = zod.object({
                     time: zod.string(),
                 })
             ),
+        })
+    ),
+});
+
+export const lectureSchema = zod.object({
+    lectures: zod.array(
+        zod.object({
+            date: zod.string().refine((val) => val.length === 8),
+            room: zod.string(),
+            time: zod.string(),
         })
     ),
 });

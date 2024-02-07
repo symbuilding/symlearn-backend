@@ -6,6 +6,7 @@
             "batch": "2023-26",
             "lectures": [
                 {
+                    "lid": 1,
                     "date": "string",
                     "room": "string",
                     "time": "string"

@@ -1,6 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
-import { timeTableSchema, classPatternSchema, Lecture, Course } from "./types";
+import { timeTableSchema, classPatternSchema, Lecture, Course, lectureSchema } from "./types";
 import timetableData from "./data/timetable.json";
 
 const getTimetableData = async () => {
@@ -63,6 +63,19 @@ app.get(
 
 // TODO:
 // app.get("/timetable/date-wise/:date", (req, res) => {});
+
+app.post("/timetable/:course_name", jsonParser, function (req, res) {
+    const course_name = req.params.course_name;
+    const validatedData = lectureSchema.safeParse(req.body);
+    if (validatedData.success){
+        const lectures = validatedData.data;
+        console.log(lectures);
+        res.json({
+            "body": "got it mate"
+        })
+    }
+
+});
 
 app.put("/timetable/:id", jsonParser, function (req, res) {
     const timetableId = req.params.id;
