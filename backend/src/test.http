@@ -1,1 +1,18 @@
 GET localhost:4000/timetable
+
+GET localhost:4000/timetable/course-wise/dsa/string
+
+GET localhost:4000/timetable/date-wise/string99
+
+POST localhost:4000/timetable/dsa
+Content-Type: application/json
+
+{
+    "lectures": [
+        {
+            "date": "string99",
+            "room": "string",
+            "time": "string"
+        }
+    ]
+}
