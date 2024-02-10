@@ -42,9 +42,16 @@ export const lectureSchema = zod.object({
             date: zod.string().refine((val) => val.length === 8),
             room: zod.string(),
             time: zod.string(),
+            courseName: zod.string(),
         })
     ),
 });
+
+export const courseSchema = zod.object({
+    name: zod.string(),
+    instructor: zod.string(),
+    batch: zod.string(),
+})
 
 export const classPatternSchema = zod.object({
     rows: zod.number().min(1).max(10),

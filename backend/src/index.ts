@@ -6,13 +6,11 @@ import {
     Course,
     lectureSchema,
     Lecture,
+    courseSchema,
+    
 } from "./types";
-import timetableData from "./data/timetable.json";
+import { courseModel, lectureModel} from "./db";
 import * as fs from "fs";
-
-const getTimetableData = async () => {
-    return timetableData;
-};
 
 let jsonParser = bodyParser.json();
 
@@ -29,90 +27,54 @@ app.get(
         const courseName = req.params.coures_name;
         const lectureDate = req.params.date;
 
-        const data = await getTimetableData();
+        const lectures = await lectureModel.find();
 
-        let desired_course: Course | undefined;
-
-        data.courses.forEach((course) => {
-            if (course.name.toLowerCase() === courseName.toLowerCase()) {
-                desired_course = course;
-            }
-        });
-
-        if (!desired_course) {
-            return res.json({
-                error: `Provided course, ${courseName} does not exist`,
-            });
-        }
-
-        res.json(
-            desired_course.lectures.filter(
-                (lecture) => lecture.date === lectureDate
-            )
-        );
-
-        /*
-         *FIXME:  Do we need this :c
-
-        const validatedData = timeTableSchema.safeParse(req.body);
-
-        if (validatedData.success) {
-            console.log(validatedData.data);
-
-            res.json(getTimetableData());
-        } else {
-            const resObj = {
-                res: "nono. Bad request",
-            };
-            res.json(resObj);
-        }
-        */
+        res.json({lectures: lectures.filter(lecture => lecture.courseName === courseName && lecture.date === lectureDate)});
     }
 );
 
 app.get("/timetable/date-wise/:date", async (req, res) => {
     const lectureDate = req.params.date;
 
-    const data = await getTimetableData();
+    const lectures = await lectureModel.find();
 
-    const lectures: Lecture[] = [];
-
-    data.courses.forEach((course) => {
-        course.lectures.forEach(lecture => {
-            if(lecture.date === lectureDate){
-                lectures.push(lecture);
-            }
-        })
-    });
-
-    res.json({ lectures });
+    res.json({ lectures: lectures.filter(lecture => lecture.date === lectureDate) });
 });
 
-app.post("/timetable/:course_name", jsonParser, async function (req, res) {
-    const course_name = req.params.course_name;
+app.post("/timetable/addCourse",jsonParser,async function(req,res){
+    const validatedData = courseSchema.safeParse(req.body);
+
+    if(validatedData.success){
+        const {name, instructor, batch} = req.body;
+        const courseDetails = await courseModel.create([{
+            name,
+            instructor,
+            batch
+        }])
+    
+        res.json({"OK": "Course has been added"});
+    }
+    else{
+        res.status(405).json({
+            error: "Invalid body format"
+        });
+    }
+})
+
+app.post("/timetable/addLectures", jsonParser, async function (req, res) {
     const validatedData = lectureSchema.safeParse(req.body);
     if (validatedData.success) {
         const lectures = validatedData.data;
 
-        const data = await getTimetableData();
+        console.log(lectures.lectures);
 
-        const desired_course = data.courses.find(
-            (course) => course.name.toLowerCase() === course_name.toLowerCase()
-        );
-
-        if (!desired_course) {
-            return res.status(405).json({
-                error: `Provided course, ${course_name} does not exist`,
-            });
-        }
-
-        lectures.lectures.forEach((lecture) => {
-            desired_course.lectures.push({ lid: 10, ...lecture });
+        lectures.lectures.forEach(lecture => {
+            (async function(){
+                await lectureModel.create([{...lecture}]);
+            })()
         });
 
-        fs.writeFileSync("src/data/timetable.json", JSON.stringify(data));
-
-        res.json("Lecture has been added");
+        res.json({"OK": "Lecture has been added"});
     } else {
         res.status(405).json({
             error: "Invalid body format for this endpoint.",
