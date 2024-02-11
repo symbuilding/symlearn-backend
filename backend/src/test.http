@@ -1,18 +1,42 @@
 GET localhost:4000/timetable
 
-GET localhost:4000/timetable/course-wise/dsa/string
+GET localhost:4000/timetable/course-wise/dsa/pleasewo
 
-GET localhost:4000/timetable/date-wise/string99
+GET localhost:4000/timetable/date-wise/pleasewo
 
-POST localhost:4000/timetable/dsa
+POST localhost:4000/timetable/addLectures
 Content-Type: application/json
 
 {
     "lectures": [
         {
-            "date": "string99",
+            "date": "pleasewo",
             "room": "string",
-            "time": "string"
+            "time": "string",
+            "courseName": "dsa"
         }
     ]
 }
+
+PUT localhost:4000/timetable/updateLecture/b43c8582-78d2-4c2a-82a6-e3df4a32a8c2
+Content-Type: application/json
+
+{
+    "date": "idk12345",
+    "room": "string",
+    "time": "string",
+    "courseName": "dsa"
+}
+
+DELETE localhost:4000/timetable/deleteLecture/b43c8582-78d2-4c2a-82a6-e3df4a32a8c2
+
+POST localhost:4000/timetable/addCourse
+Content-Type: application/json
+
+{
+    "name": "dsa",
+    "instructor": "Bitch",
+    "batch": "2026-29"
+}
+
+DELETE localhost:4000/timetable/deleteCourse/holaa
