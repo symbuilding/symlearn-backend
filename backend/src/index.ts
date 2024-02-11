@@ -10,7 +10,11 @@ import { courseModel, lectureModel } from "./db";
 
 let jsonParser = bodyParser.json();
 
+let cors = require("cors");
+
 const app = express();
+
+app.use(cors());
 
 //TODO: Return Entire data at this endpoint
 app.get("/timetable", (_, res) => {
@@ -115,28 +119,32 @@ app.post("/timetable/addLectures", jsonParser, async function (req, res) {
     res.json({ OK: "Lecture has been added" });
 });
 
-app.put("/timetable/updateLecture/:lecture_id", jsonParser, async function (req, res) {
-    const lectureId = req.params.lecture_id;
-    const validatedData = lectureSchema.safeParse(req.body);
+app.put(
+    "/timetable/updateLecture/:lecture_id",
+    jsonParser,
+    async function (req, res) {
+        const lectureId = req.params.lecture_id;
+        const validatedData = lectureSchema.safeParse(req.body);
 
-    if (!validatedData.success) {
-        res.status(400).json({
-            error: "Invalid body format for this endpoint.",
-        });
-        return;
+        if (!validatedData.success) {
+            res.status(400).json({
+                error: "Invalid body format for this endpoint.",
+            });
+            return;
+        }
+
+        const updateData = validatedData.data;
+
+        if (!(await lectureModel.exists({ _id: lectureId }))) {
+            res.status(400).json({ ERROR: "Provided Lecture does not exists" });
+            return;
+        }
+
+        await lectureModel.updateOne({ _id: lectureId }, updateData);
+
+        res.json({ OK: "Lecture successfully updated" });
     }
-
-    const updateData = validatedData.data;
-
-    if (!(await lectureModel.exists({ _id: lectureId }))) {
-        res.status(400).json({ ERROR: "Provided Lecture does not exists" });
-        return;
-    }
-
-    await lectureModel.updateOne({ _id: lectureId }, updateData);
-
-    res.json({ OK: "Lecture successfully updated" });
-});
+);
 
 app.delete("/timetable/deleteLecture/:lecture_id", async function (req, res) {
     const lectureId = req.params.lecture_id;
