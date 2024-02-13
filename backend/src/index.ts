@@ -5,8 +5,9 @@ import {
     lectureVecSchema,
     courseSchema,
     lectureSchema,
+    quizSchema,
 } from "./types";
-import { courseModel, lectureModel } from "./db";
+import { courseModel, lectureModel, quizModel } from "./db";
 
 let jsonParser = bodyParser.json();
 
@@ -62,7 +63,7 @@ app.post("/timetable/addCourse", jsonParser, async function (req, res) {
 
     const { name: course_name, instructor, batch } = req.body;
 
-    if (!(await courseModel.exists({ _id: course_name }))) {
+    if (await courseModel.exists({ _id: course_name })) {
         res.status(400).json({ ERROR: "Provided course already exists" });
         return;
     }
@@ -192,6 +193,30 @@ app.post("/classPattern/:id", jsonParser, function (req, res) {
     }
 
     res.json({ layout });
+});
+
+app.post("/quiz/create", jsonParser, async (req, res) => {
+    const validatedData = quizSchema.safeParse(req.body);
+
+    if (!validatedData.success) {
+        res.status(400).json({
+            ERROR: "Invalid body format for creating the quiz",
+        });
+        return;
+    }
+
+    if (
+        !(await courseModel.exists({
+            _id: validatedData.data.courseName,
+        }))
+    ) {
+        res.status(400).json({ ERROR: "Provided course does not exists" });
+        return;
+    }
+
+    await quizModel.create([{ _id: crypto.randomUUID(), ...validatedData.data }]);
+
+    res.json({ OK: "New quiz has been created" });
 });
 
 app.listen(4000);

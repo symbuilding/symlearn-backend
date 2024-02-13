@@ -39,4 +39,20 @@ Content-Type: application/json
     "batch": "2026-29"
 }
 
-DELETE localhost:4000/timetable/deleteCourse/holaa
+DELETE localhost:4000/timetable/deleteCourse/dsa
+
+POST localhost:4000/quiz/create
+Content-Type: application/json
+
+{
+	"courseName": "dsa",
+	"time": "string",
+	"date": "string",
+	"quiz": [
+        {
+            "question": "WHY?",
+            "options": ["idk", "idc"],
+            "answer": "idc"
+        }
+    ]
+}

@@ -26,6 +26,44 @@ const courseScheme = new mongoose.Schema({
     batch: String,
 });
 
-export const courseModel = mongoose.model("courseSchema", courseScheme);
+export const courseModel = mongoose.model("courseDocument", courseScheme);
 
-export const lectureModel = mongoose.model("lectureSchema", lecturesVecSchema);
+export const lectureModel = mongoose.model(
+    "lectureDocument",
+    lecturesVecSchema
+);
+
+export const quizModel = mongoose.model(
+    "quizDocument",
+    new mongoose.Schema({
+        _id: String,
+        courseName: {
+            type: String,
+            required: true,
+        },
+        time: {
+            type: String,
+            required: true,
+        },
+        date: {
+            type: String,
+            required: true,
+        },
+        quiz: [
+            {
+                question: {
+                    type: String,
+                    required: true,
+                },
+                options: {
+                    type: [String],
+                    required: true,
+                },
+                answer: {
+                    type: String,
+                    required: true,
+                },
+            },
+        ],
+    })
+);

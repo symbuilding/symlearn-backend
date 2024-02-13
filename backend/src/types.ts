@@ -47,3 +47,16 @@ export const classPatternSchema = zod.object({
     rows: zod.number().min(1).max(10),
     columns: zod.number().min(1).max(10),
 });
+
+export const quizSchema = zod.object({
+    courseName: zod.string(),
+    time: zod.string(),
+    date: zod.string(),
+    quiz: zod.array(
+        zod.object({
+            question: zod.string(),
+            options: zod.array(zod.string()),
+            answer: zod.string(),
+        })
+    ),
+});
