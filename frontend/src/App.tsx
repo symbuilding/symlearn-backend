@@ -1,7 +1,13 @@
-const App = () => {
-    return (
-        <h1>hi :)</h1>
-    )
-}
+import Routing from "./Routing";
+import CalenderEvents from "./components/CalenderEvents";
+import Navpane from "./components/Navpane";
 
-export default App
+export default function App() {
+    return (
+        <>
+            <Navpane />
+            <Routing />
+            <CalenderEvents />
+        </>
+    );
+}

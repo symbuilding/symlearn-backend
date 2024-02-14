@@ -51,6 +51,11 @@ app.get("/timetable/date-wise/:date", async (req, res) => {
     });
 });
 
+app.get("/timetable/courses", async (_, res) => {
+    const courses = await courseModel.find();
+    return res.json({courses});
+});
+
 app.post("/timetable/addCourse", jsonParser, async function (req, res) {
     const validatedData = courseSchema.safeParse(req.body);
 
