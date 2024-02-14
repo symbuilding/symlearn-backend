@@ -1,10 +1,11 @@
+import { NavLink } from "react-router-dom"
+
 export default function Navpane() {
     return (
-        <div>
+        <div className="navpane-container">
             <h1>Symlearn</h1>
-            <div>Home</div>
-            <div>Courses</div>
-            <div>Tasks</div>
+            <NavLink to={"/"}>Home</NavLink>
+            <NavLink to={"/courses"}>Courses</NavLink>
         </div>
     );
 }

@@ -23,19 +23,16 @@ app.get("/timetable", (_, res) => {
 });
 
 app.get(
-    "/timetable/course-wise/:coures_name/:lecture_date",
+    "/timetable/course-wise/:coures_name",
     jsonParser,
     async function (req, res) {
         const courseName = req.params.coures_name;
-        const lectureDate = req.params.lecture_date;
 
         const lectures = await lectureModel.find();
 
         res.json({
             lectures: lectures.filter(
-                (lecture) =>
-                    lecture.courseName === courseName &&
-                    lecture.date === lectureDate
+                (lecture) => lecture.courseName === courseName
             ),
         });
     }
@@ -53,7 +50,7 @@ app.get("/timetable/date-wise/:date", async (req, res) => {
 
 app.get("/timetable/courses", async (_, res) => {
     const courses = await courseModel.find();
-    return res.json({courses});
+    return res.json({ courses });
 });
 
 app.post("/timetable/addCourse", jsonParser, async function (req, res) {
@@ -219,7 +216,9 @@ app.post("/quiz/create", jsonParser, async (req, res) => {
         return;
     }
 
-    await quizModel.create([{ _id: crypto.randomUUID(), ...validatedData.data }]);
+    await quizModel.create([
+        { _id: crypto.randomUUID(), ...validatedData.data },
+    ]);
 
     res.json({ OK: "New quiz has been created" });
 });

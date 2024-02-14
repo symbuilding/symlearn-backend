@@ -10,8 +10,8 @@ const lecturesVecSchema = new mongoose.Schema({
         type: String,
         required: true,
         validate: {
-            validator: (val: string) => val.length === 8,
-            message: "Date must be 8 characters long",
+            validator: (val: string) => val.length === 10,
+            message: "Date must be 10 characters long",
         },
     },
     room: { type: String, required: true },

@@ -10,7 +10,7 @@ Content-Type: application/json
 {
     "lectures": [
         {
-            "date": "pleasewo",
+            "date": "2024-02-14",
             "room": "string",
             "time": "string",
             "courseName": "dsa"

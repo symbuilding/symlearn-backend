@@ -20,7 +20,7 @@ export type TimeTable = {
 };
 
 export const lectureSchema = zod.object({
-    date: zod.string().refine((val) => val.length === 8),
+    date: zod.string().refine((val) => val.length === 10),
     room: zod.string(),
     time: zod.string(),
     courseName: zod.string(),
@@ -29,7 +29,7 @@ export const lectureSchema = zod.object({
 export const lectureVecSchema = zod.object({
     lectures: zod.array(
         zod.object({
-            date: zod.string().refine((val) => val.length === 8),
+            date: zod.string().refine((val) => val.length === 10),
             room: zod.string(),
             time: zod.string(),
             courseName: zod.string(),
