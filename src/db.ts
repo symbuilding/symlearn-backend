@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 mongoose.connect(
-    "mongodb+srv://symlearn:Jme5HndPijSJJvVz@cluster0.v4fg9e1.mongodb.net/?retryWrites=true&w=majority"
+    "<ADD_LINK_HERE>"
 );
 
 const lecturesVecSchema = new mongoose.Schema({
