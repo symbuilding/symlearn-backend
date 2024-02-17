@@ -1,7 +1,10 @@
 import mongoose from "mongoose";
+import { env } from "process";
+
 
 mongoose.connect(
-    "<ADD_LINK_HERE>"
+    env.symlearn_mongo as string
+
 );
 
 const lecturesVecSchema = new mongoose.Schema({

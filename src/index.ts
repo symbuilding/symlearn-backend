@@ -197,6 +197,10 @@ app.post("/classPattern/:id", jsonParser, function (req, res) {
     res.json({ layout });
 });
 
+app.get("/quiz/get", async (_, res) => {
+    res.json({quizes: await quizModel.find()});
+});
+
 app.post("/quiz/create", jsonParser, async (req, res) => {
     const validatedData = quizSchema.safeParse(req.body);
 
